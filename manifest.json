@@ -1,0 +1,20 @@
+{
+
+    "manifest_version": 2,
+    "name": "Chess.com daily games limit",
+    "version": "1.0",
+  
+    "description": "Limits the number of challenges at chess.com",
+  
+    "icons": {
+      "48": "icons/chess.jpg"
+    },
+  
+    "content_scripts": [
+      {
+        "matches": ["*://*.chess.com/*"],
+        "js": ["chess_limit.js"]
+      }
+    ]
+  
+}  
