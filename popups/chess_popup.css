@@ -1,0 +1,17 @@
+body {
+    text-align:center;
+    white-space:nowrap;
+    font-family: "Segoe UI", "Tahoma", "sans-serif";
+}
+
+#input_limit{
+    width:25%;
+}
+
+#label_limit{
+    font-size: 1.5em;
+}
+
+.hide {
+    display:none;
+}

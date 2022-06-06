@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="chess_popup.css">
+</head>
+<body>
+    <button style="font-size:24px" id="settings"><i class="fa fa-gear"></i></button>
+    <div id="div_settings" class="hide">
+        <label for="input_limit" id="label_limit">Set new daily limit:</label><br><input type="number" id="input_limit" min="1" max="15"><br>
+        <button id="submit_limit">Submit</button>
+    </div>
+    <div id="div_show_limit">
+        <h1 id="h1_show_limit">0/0</h1>
+        <h2>daily games</h2>
+        <h3 id="note">Daily limit reached!</h3>
+        <h3 id="limit_note"></h3>
+    </div>
+    
+    <script type="text/javascript" src="chess_popup.js"></script>
+</body>
+</html>

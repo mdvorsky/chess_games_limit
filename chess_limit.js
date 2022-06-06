@@ -1,21 +1,28 @@
 function update_date(){
     today = new Date().toDateString()
-    saved_date = localStorage.getItem("date")
-    if (today != saved_date){
-        localStorage.setItem("date", today)
-        localStorage.setItem("games_today", 0)
-        localStorage.setItem("daily_limit", 3)
-    }
+    chrome.storage.local.get(["date"], function(result){
+        saved_date = result.date
+        if (today != saved_date){
+            console.log("setting new date (" + saved_date + " != " + today + ")")
+            chrome.storage.local.set({"date": today})
+            chrome.storage.local.set({"games_today": 0})
+            chrome.storage.local.set({"daily_limit": 3})
+        }
+    });
+    
 }
 
 
 function update_number_of_games(){
     // Increases the number of games played today after the button is clicked
-    games_today = localStorage.getItem("games_today")
-    if (games_today == null){
-        games_today = 0
-    }
-    localStorage.setItem("games_today", parseInt(games_today) + 1)
+    chrome.storage.local.get(["games_today"], function(result){
+        games_today = result.games_today
+        if (games_today == null){
+            games_today = 0
+        }
+        chrome.storage.local.set({"games_today": parseInt(games_today) + 1})
+
+    });
 }
 
 
@@ -69,21 +76,22 @@ function add_listeners(buttons){
 
 function disable_enable(buttons){
     // Checks if the limit was exceeded. It disables or enables all buttons accordingly
-    daily_limit = localStorage.getItem("daily_limit")
-    games_today = localStorage.getItem("games_today")
-    
-    console.log(String(daily_limit)+ "<- daily limit | games today -> " + String(games_today))
-    disable = (games_today >= daily_limit)
-    console.log("disable" + String(disable))
-    
-    for (index = 0;index<buttons.length;index++){
-        buttons[index].disabled = disable
-    }
+    chrome.storage.local.get(["daily_limit", "games_today"], function(result){
+        daily_limit = result.daily_limit
+        games_today = result.games_today
+
+        console.log(String(daily_limit)+ "<- daily limit | games today -> " + String(games_today))
+        disable = (games_today >= daily_limit)
+        console.log("Disable buttons? " + String(disable))
+        
+        for (index = 0;index<buttons.length;index++){
+            buttons[index].disabled = disable
+        }
+    });
+       
 
 }
 
-
 update_date()
-localStorage.setItem("daily_limit", 2)
 document.body.addEventListener("click", find_buttons)
 find_buttons()

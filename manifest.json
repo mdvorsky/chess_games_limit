@@ -1,5 +1,4 @@
 {
-
     "manifest_version": 2,
     "name": "Chess.com daily games limit",
     "version": "1.0",
@@ -9,12 +8,16 @@
     "icons": {
       "48": "icons/chess.jpg"
     },
-  
+
+    "permissions": ["activeTab", "storage"],
+    "browser_action": {
+      "default_popup": "popups/chess_popup.html"
+    },
+
     "content_scripts": [
       {
         "matches": ["*://*.chess.com/*"],
         "js": ["chess_limit.js"]
       }
-    ]
-  
+    ]  
 }  
