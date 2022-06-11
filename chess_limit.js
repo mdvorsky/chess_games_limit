@@ -1,15 +1,16 @@
 function update_date(){
+    // Checks whether the date have changed (to null the number of games for today)
     today = new Date().toDateString()
     chrome.storage.local.get(["date"], function(result){
         saved_date = result.date
         if (today != saved_date){
-            console.log("setting new date (" + saved_date + " != " + today + ")")
             chrome.storage.local.set({"date": today})
             chrome.storage.local.set({"games_today": 0})
+        }
+        if (saved_date == null) {
             chrome.storage.local.set({"daily_limit": 3})
         }
     });
-    
 }
 
 
@@ -21,7 +22,6 @@ function update_number_of_games(){
             games_today = 0
         }
         chrome.storage.local.set({"games_today": parseInt(games_today) + 1})
-
     });
 }
 
@@ -34,15 +34,12 @@ function game_over_screen_timer(){
         ){
             setTimeout(find_buttons, 1500)
         }
-
     }
 }
 
 
 function find_buttons(){
     // Finds the buttons for starting a new game
-
-    console.log("Updating body")
     SELECTORS = [
         ".new-game-margin-component .ui_v5-button-large.ui_v5-button-full",
         ".ui_v5-button-component.ui_v5-button-primary.custom-game-options-play-button",
@@ -52,17 +49,17 @@ function find_buttons(){
     game_over_screen_timer()
 
     play_buttons = []
-    for (index = 0; index<SELECTORS.length;index++){
+    for (index = 0; index < SELECTORS.length;index++){
+        // Adds button elements to array
         selected = document.querySelectorAll(SELECTORS[index])
         selected_array = Array.from(selected)
         play_buttons = play_buttons.concat(selected_array)
     }
+
     if (play_buttons.length > 0){
         add_listeners(play_buttons)
         disable_enable(play_buttons)
     }
-    console.log(play_buttons)
-
 }
 
 
@@ -80,16 +77,19 @@ function disable_enable(buttons){
         daily_limit = result.daily_limit
         games_today = result.games_today
 
-        console.log(String(daily_limit)+ "<- daily limit | games today -> " + String(games_today))
         disable = (games_today >= daily_limit)
-        console.log("Disable buttons? " + String(disable))
         
-        for (index = 0;index<buttons.length;index++){
+        if (disable){
+            title_to_set = "Daily limit reached!\nGood luck tomorrow!"
+        } else {
+            title_to_set = ""
+        }
+
+        for (index = 0;index < buttons.length;index++){
             buttons[index].disabled = disable
+            buttons[index].title = title_to_set
         }
     });
-       
-
 }
 
 update_date()
