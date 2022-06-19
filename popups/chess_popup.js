@@ -53,23 +53,22 @@ function swap_windows(){
 function set_new_limit(){
     // Saves the newly set daily limit to storage
     new_limit = document.getElementById("input_limit").value
-    if (isNaN(new_limit)){
-        return
-    }
-    chrome.storage.local.get(["daily_limit"], function (result){
-        old_limit = result.daily_limit
-        
-        swap_windows()
+    if (!isNaN(new_limit)){
+        chrome.storage.local.get(["daily_limit"], function (result){
+            old_limit = result.daily_limit
+            
+            swap_windows()
 
-        // Selecting text to display
-        if (new_limit != old_limit){
-            chrome.storage.local.set({"daily_limit": new_limit})
-            show_text()
-            document.getElementById("limit_note").innerHTML = "Daily limit set to " + String(new_limit) + "."
-        } else {
-            document.getElementById("limit_note").innerHTML = "Daily limit unchanged."
-        }       
-    })
+            // Selecting text to display
+            if (new_limit != old_limit){
+                chrome.storage.local.set({"daily_limit": new_limit})
+                show_text()
+                document.getElementById("limit_note").innerHTML = "Daily limit set to " + String(new_limit) + "."
+            } else {
+                document.getElementById("limit_note").innerHTML = "Daily limit unchanged."
+            }       
+        })
+    }
 }
 
 document.getElementById("settings").addEventListener("click", swap_windows);

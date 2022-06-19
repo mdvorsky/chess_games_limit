@@ -3,10 +3,10 @@
     "name": "Chess.com daily games limit",
     "version": "1.0",
   
-    "description": "Limits the number of challenges at chess.com",
+    "description": "Limits the number of daily games at chess.com to avoid tilt or addiction. Set your daily limit in the popup window and enjoy the game!",
   
     "icons": {
-      "48": "icons/chess.jpg"
+      "48": "icons/chess.png"
     },
 
     "permissions": ["activeTab", "storage"],
