@@ -1,5 +1,5 @@
 function update_date(){
-    // Checks whether the date have changed (to null the number of games for today)
+    // Checks whether the date have changed (to reset the number of games for today)
     today = new Date().toDateString()
     chrome.storage.local.get(["date"], function(result){
         saved_date = result.date
@@ -44,7 +44,11 @@ function find_buttons(){
         ".new-game-margin-component .ui_v5-button-large.ui_v5-button-full",
         ".ui_v5-button-component.ui_v5-button-primary.custom-game-options-play-button",
         ".daily-game-footer-game-over button",
-        ".live-game-buttons-game-over button"
+        ".live-game-buttons-game-over button",
+        ".custom-game-options-play-button"
+    ]
+    LINKS_SELECTORS = [
+        ".play-quick-links-play-x-min"  //  Play X min (home page)
     ]
     game_over_screen_timer()
 
@@ -56,23 +60,33 @@ function find_buttons(){
         play_buttons = play_buttons.concat(selected_array)
     }
 
-    if (play_buttons.length > 0){
+    play_links = []
+    for (index = 0; index < LINKS_SELECTORS.length;index++){
+        // Adds button elements to array
+        selected = document.querySelectorAll(LINKS_SELECTORS[index])
+        selected_array = Array.from(selected)
+        play_links = play_links.concat(selected_array)
+    }
+
+
+    if ((play_buttons.length + play_links.length) > 0){
         add_listeners(play_buttons)
-        disable_enable(play_buttons)
+        add_listeners(play_links)
+        disable_enable(play_buttons, play_links)
     }
 }
 
 
-function add_listeners(buttons){
-    // When the button is clicked, the number of games played today is increased
-    for (index = 0;index<buttons.length;index++){
-        buttons[index].addEventListener("click", update_number_of_games)
+function add_listeners(elements){
+    // When the button / link is clicked, the number of games played today is increased
+    for (index = 0; index < elements.length; index++){
+        elements[index].addEventListener("click", update_number_of_games)
     }
 }
 
 
-function disable_enable(buttons){
-    // Checks if the limit was exceeded. It disables or enables all buttons accordingly
+function disable_enable(buttons, links_to_hide){
+    // Checks if the daily limit was exceeded. It disables or enables all buttons accordingly
     chrome.storage.local.get(["daily_limit", "games_today"], function(result){
         daily_limit = result.daily_limit
         games_today = result.games_today
@@ -81,13 +95,18 @@ function disable_enable(buttons){
         
         if (disable){
             title_to_set = "Daily limit reached!\nGood luck tomorrow!"
+            display_value = "none"
         } else {
             title_to_set = ""
+            display_value = ""
         }
 
         for (index = 0;index < buttons.length;index++){
             buttons[index].disabled = disable
             buttons[index].title = title_to_set
+        }
+        for (index = 0; index < links_to_hide.length; index++){
+            links_to_hide[index].style.display = display_value
         }
     });
 }
