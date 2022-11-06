@@ -42,10 +42,12 @@ function find_buttons(){
     // Finds the buttons for starting a new game
     SELECTORS = [
         ".new-game-margin-component .ui_v5-button-large.ui_v5-button-full",
+        ".new-game-index-content .ui_v5-button-large.ui_v5-button-full",
         ".ui_v5-button-component.ui_v5-button-primary.custom-game-options-play-button",
         ".daily-game-footer-game-over button",
         ".live-game-buttons-game-over button",
-        ".custom-game-options-play-button"
+        ".custom-game-options-play-button",
+        ".game-over-buttons-button"
     ]
     LINKS_SELECTORS = [
         ".play-quick-links-play-x-min"  //  Play X min (home page)
